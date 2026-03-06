@@ -3,57 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>AKSAKA | SYSTEM_COMPLETE</title>
+    <title>AKSAKA | DARK_HD</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=JetBrains+Mono&family=Plus+Jakarta+Sans:wght@400;800&display=swap" rel="stylesheet">
     <style>
-        :root { --accent: #ff0055; --ai-color: #00f2ff; }
+        :root { --accent: #ff0055; --bg: #0a0a0a; --card: #141414; --ai-color: #00f2ff; }
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { background: #000; overflow: hidden; height: 100dvh; width: 100vw; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background: var(--bg); color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; height: 100dvh; width: 100vw; overflow: hidden; }
 
-        /* --- 1. VIDEO BACKGROUND (MATA KEDIP) --- */
+        /* --- BACKGROUND VIDEO (LOCKED) --- */
         .video-fixed { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
-        video#eye-bg { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.8); }
+        video#eye-bg { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.6) contrast(1.2); }
 
-        /* --- 2. LOGIN SCREEN (LAYER DEPAN) --- */
+        /* --- LOGIN SCREEN --- */
         #login-screen {
             position: fixed; inset: 0; z-index: 999;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
+            background: rgba(0,0,0,0.4); backdrop-filter: blur(5px);
         }
         .aksaka-title {
             font-family: 'Orbitron'; font-size: 3.5rem; color: #fff;
-            text-shadow: 0 0 20px var(--accent); letter-spacing: 5px;
-            margin-bottom: 40px; pointer-events: none;
+            text-shadow: 0 0 30px var(--accent); letter-spacing: 10px;
+            margin-bottom: 50px; cursor: pointer;
         }
         .btn-gacor {
-            padding: 20px 60px; background: #fff; color: #000;
-            font-family: 'Orbitron'; font-weight: 900; border-radius: 50px;
-            cursor: pointer; border: 4px solid var(--accent);
-            box-shadow: 0 0 30px rgba(255, 0, 85, 0.6); pointer-events: auto !important;
-            transition: 0.3s;
+            padding: 22px 70px; background: var(--accent); color: #fff;
+            font-family: 'Orbitron'; font-weight: 900; border-radius: 15px;
+            cursor: pointer; border: none; box-shadow: 0 0 50px rgba(255, 0, 85, 0.4);
+            pointer-events: auto !important; transition: 0.3s;
         }
+        .btn-gacor:active { transform: scale(0.95); filter: brightness(1.2); }
 
-        /* --- 3. MAIN APP (CERAH & HD) --- */
+        /* --- MAIN APP (DARK HD MODE) --- */
         #main-app {
             display: none; position: fixed; inset: 0; z-index: 1000;
-            background: #fafafa; overflow-y: auto; padding-bottom: 100px;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            overflow-y: auto; padding-bottom: 120px;
         }
         .container { max-width: 500px; margin: 0 auto; padding: 25px; }
-        .card-gacor { background: #fff; border: 1px solid #eee; padding: 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
         
-        /* JOKI & PARTNER */
-        .joki-item { display: flex; justify-content: space-between; padding: 15px; background: #fdfdfd; border-radius: 12px; margin-bottom: 8px; border: 1px solid #f0f0f0; }
-        .partner-img { width: 130px; height: 130px; margin: 0 auto; border-radius: 50% 20%; background: var(--accent); padding: 5px; animation: morph 6s infinite alternate; }
-        .partner-img img { width: 100%; height: 100%; border-radius: inherit; object-fit: cover; border: 3px solid #fff; }
-        @keyframes morph { 0% { border-radius: 50% 20%; } 100% { border-radius: 20% 50%; } }
+        /* CARD STYLE */
+        .card-hd { 
+            background: var(--card); border: 1px solid rgba(255,255,255,0.05); 
+            padding: 25px; border-radius: 24px; 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            position: relative; overflow: hidden;
+        }
+        .card-hd::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+        }
+        
+        /* LIST ITEM */
+        .item-dark { 
+            display: flex; justify-content: space-between; padding: 18px; 
+            background: rgba(255,255,255,0.03); border-radius: 16px; 
+            margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.05);
+            font-family: 'JetBrains Mono'; font-size: 13px;
+        }
 
-        /* --- 4. NAVIGATION --- */
-        nav { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); width: 85%; max-width: 380px; height: 70px; background: rgba(255,255,255,0.9); backdrop-filter: blur(10px); border-radius: 35px; display: flex; justify-content: space-around; align-items: center; border: 1px solid #eee; z-index: 1100; }
-        .nav-link { font-family: 'Orbitron'; font-size: 9px; font-weight: 900; color: #ccc; cursor: pointer; }
-        .nav-link.active { color: var(--accent); }
+        /* PARTNER HD */
+        .partner-wrap { 
+            width: 150px; height: 150px; margin: 0 auto; border-radius: 30px; 
+            background: var(--accent); padding: 4px; box-shadow: 0 0 30px rgba(255,0,85,0.3);
+            animation: glow 3s infinite alternate;
+        }
+        .partner-wrap img { width: 100%; height: 100%; border-radius: 26px; object-fit: cover; }
+        @keyframes glow { from { box-shadow: 0 0 10px rgba(255,0,85,0.2); } to { box-shadow: 0 0 40px rgba(255,0,85,0.5); } }
 
-        /* --- 5. AI TERMINAL (LAYER 6) --- */
-        #ai-layer { display: none; background: #000; color: var(--ai-color); font-family: 'JetBrains Mono'; height: 250px; padding: 15px; border-radius: 15px; margin-top: 20px; overflow-y: auto; }
+        /* NAVIGATION DARK */
+        nav { 
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); 
+            width: 90%; max-width: 400px; height: 75px; 
+            background: rgba(20,20,20,0.8); backdrop-filter: blur(20px); 
+            border-radius: 25px; display: flex; justify-content: space-around; 
+            align-items: center; border: 1px solid rgba(255,255,255,0.1); z-index: 1100;
+        }
+        .nav-link { font-family: 'Orbitron'; font-size: 10px; font-weight: 900; color: #555; cursor: pointer; transition: 0.3s; }
+        .nav-link.active { color: var(--accent); text-shadow: 0 0 10px var(--accent); }
+
+        /* AI TERMINAL LAYER 6 */
+        #ai-ui { 
+            background: #000; border: 1px solid var(--ai-color); 
+            border-radius: 20px; padding: 20px; margin-top: 20px;
+            box-shadow: 0 0 30px rgba(0, 242, 255, 0.15);
+        }
     </style>
 </head>
 <body>
@@ -70,26 +104,34 @@
     <div id="main-app">
         <div class="container">
             <div id="core" class="tab-panel">
-                <center><img src="https://files.catbox.moe/kzrkbp.jpg" class="w-24 h-24 rounded-2xl mb-6 shadow-xl object-cover"></center>
-                <div class="card-gacor"><div id="type-target" style="font-family:'JetBrains Mono'; font-size:12px; line-height:2; color:#333;"></div></div>
+                <center>
+                    <div class="relative inline-block mb-10">
+                        <img src="https://files.catbox.moe/kzrkbp.jpg" class="w-32 h-32 rounded-[40px] shadow-2xl object-cover border-2 border-white/10">
+                        <div class="absolute -bottom-2 -right-2 bg-pink-600 px-3 py-1 rounded-lg text-[10px] font-black">PRO</div>
+                    </div>
+                </center>
+                <div class="card-hd">
+                    <div id="type-target" style="font-family:'JetBrains Mono'; font-size:12px; line-height:2.2; color:#00ffaa;"></div>
+                </div>
             </div>
 
             <div id="joki" class="tab-panel hidden text-center">
-                <h2 class="font-black mb-4">SERVICE DATABASE</h2>
-                <div class="joki-item"><span>LEGENDARY</span><b class="text-red-500">110K</b></div>
-                <div class="joki-item"><span>MASTER</span><b class="text-red-500">100K</b></div>
-                <a href="https://wa.me/6288902072245" class="block w-full py-4 bg-black text-white rounded-xl mt-4">ORDER_NOW</a>
+                <h2 class="font-black text-xl mb-8 tracking-widest text-zinc-400">SERVICE_DATABASE</h2>
+                <div class="item-dark"><span>LEGENDARY_RANK</span><b class="text-pink-500">110K</b></div>
+                <div class="item-dark"><span>MASTER_RANK</span><b class="text-pink-500">100K</b></div>
+                <div class="item-dark"><span>ELITE_RANK</span><b class="text-pink-500">90K</b></div>
+                <a href="https://wa.me/6288902072245" class="block w-full py-5 bg-white text-black font-black rounded-2xl mt-10 hover:bg-pink-500 transition-all">INITIALIZE_ORDER</a>
             </div>
 
             <div id="partner" class="tab-panel hidden text-center">
-                <div class="partner-img"><img src="https://files.catbox.moe/j44mvd.jpg"></div>
-                <h3 id="ayu-trigger" class="font-black text-2xl mt-6 cursor-pointer">AYU_CORE</h3>
-                <p class="text-[10px] text-zinc-400">PIN: 2245 (Vault Access)</p>
+                <div class="partner-wrap"><img src="https://files.catbox.moe/j44mvd.jpg"></div>
+                <h3 id="ayu-trigger" class="font-black text-3xl mt-10 tracking-tighter text-white">AYU_CORE</h3>
+                <p class="text-[10px] text-zinc-500 mt-4 tracking-[4px]">PROTECTED_BY_VAULT</p>
             </div>
 
             <div id="ai-ui" class="hidden">
-                <div id="ai-layer">>> NEURAL_AI_v2.0_ONLINE...</div>
-                <input type="text" id="ai-input" class="w-full bg-zinc-900 text-cyan-400 p-4 mt-2 rounded-xl outline-none" placeholder="Enter logic command...">
+                <div id="terminal" class="h-64 overflow-y-auto text-[11px] mb-4 text-cyan-400">>> NEURAL_LINK_ESTABLISHED...<br>>> WELCOME BACK, AKSAKA.</div>
+                <input type="text" id="ai-input" class="w-full bg-zinc-900/50 border border-cyan-900/50 text-white p-4 rounded-xl outline-none" placeholder="Type logic command...">
             </div>
         </div>
 
@@ -103,23 +145,30 @@
     <audio id="bgm" loop><source src="https://files.catbox.moe/6v0p6a.mp3" type="audio/mpeg"></audio>
 
     <script>
-        // --- LOGIN LOGIC ---
-        document.getElementById('enter-btn').addEventListener('click', () => {
-            document.getElementById('bgm').play().catch(()=>{});
-            document.getElementById('login-screen').style.display = 'none';
-            document.getElementById('main-app').style.display = 'block';
-            type();
+        const btn = document.getElementById('enter-btn');
+        const login = document.getElementById('login-screen');
+        const app = document.getElementById('main-app');
+        const bgm = document.getElementById('bgm');
+
+        btn.addEventListener('click', () => {
+            bgm.play().catch(()=>{});
+            login.style.opacity = '0';
+            setTimeout(() => {
+                login.style.display = 'none';
+                app.style.display = 'block';
+                type();
+            }, 500);
         });
 
-        // --- LAYER 6: AKSAKA AI (PW 0207) ---
+        // --- LAYER 6: AKSAKA (PW 0207) ---
         let aksakaCount = 0;
         document.getElementById('aksaka-trigger').addEventListener('click', () => {
             aksakaCount++;
             if(aksakaCount >= 5) {
-                let pw = prompt("AKSAKA_PW:");
+                let pw = prompt("AKSAKA_ACCESS_KEY:");
                 if(pw === "0207") {
-                    document.getElementById('login-screen').style.display = 'none';
-                    document.getElementById('main-app').style.display = 'block';
+                    login.style.display = 'none';
+                    app.style.display = 'block';
                     document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
                     document.getElementById('ai-ui').classList.remove('hidden');
                     document.getElementById('navbar').style.display = 'none';
@@ -128,19 +177,19 @@
             }
         });
 
-        // --- VAULT: AYU PIN 2245 ---
+        // --- VAULT: AYU (PIN 2245) ---
         let ayuCount = 0;
         document.getElementById('ayu-trigger').addEventListener('click', () => {
             ayuCount++;
             if(ayuCount >= 5) {
                 let p = prompt("VAULT_PIN:");
-                if(p === "2245") alert("Accessing Security Logs...");
+                if(p === "2245") alert("Security Log: Boomerang System Active.");
                 ayuCount = 0;
             }
         });
 
-        // --- SYSTEM CORE ---
-        const txt = [">> AUTH: AKSAKA_ARCH", ">> STATUS: TAKEN_BY_AYU", ">> ROLE: FULL_STACK", ">> GACOR: ACTIVE"];
+        // --- TYPEWRITER ---
+        const txt = [">> DECRYPTING_DATA...", ">> NAME: AKSAKA_ARCH", ">> STATUS: TAKEN_BY_AYU", ">> ROLE: SENIOR_DEV", ">> STATUS: GACOR_LEVEL_MAX"];
         function type() {
             let l=0, c=0; const t = document.getElementById('type-target'); t.innerHTML="";
             function go() {
@@ -153,9 +202,28 @@
 
         function switchTab(t) {
             document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
+            document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
             document.getElementById(t).classList.remove('hidden');
             if(t === 'core') type();
+            // Update active nav link
+            const links = document.querySelectorAll('.nav-link');
+            if(t==='core') links[0].classList.add('active');
+            if(t==='joki') links[1].classList.add('active');
+            if(t==='partner') links[2].classList.add('active');
         }
+
+        // --- AI CHAT LOGIC ---
+        document.getElementById('ai-input').addEventListener('keypress', function(e) {
+            if(e.key === 'Enter') {
+                const term = document.getElementById('terminal');
+                term.innerHTML += `<br><span style="color:#fff;">[Aksaka]: ${this.value}</span>`;
+                setTimeout(() => {
+                    term.innerHTML += `<br>[AI]: Logic processed. Status Gacor confirmed.`;
+                    term.scrollTop = term.scrollHeight;
+                }, 400);
+                this.value = '';
+            }
+        });
     </script>
 </body>
 </html>
