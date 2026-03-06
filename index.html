@@ -194,6 +194,38 @@
     </script>
 </body>
 </html>
+t = 0;
+            }
+        });
+
+        // --- TYPEWRITER ---
+        const txt = [">> INITIALIZING_HD_BOOT...", ">> USER: AKSAKA_ARCH", ">> STATUS: TAKEN_BY_AYU", ">> SKILL: GOD_LEVEL_IT"];
+        function type() {
+            let l=0, c=0; const t = document.getElementById('type-target'); t.innerHTML="";
+            function go() {
+                if(l < txt.length) {
+                    if(c < txt[l].length) { t.innerHTML += txt[l].charAt(c); c++; setTimeout(go, 30); }
+                    else { t.innerHTML += "<br>"; l++; c=0; setTimeout(go, 200); }
+                }
+            } go();
+        }
+
+        // --- AI CHAT LOGIC ---
+        const aiIn = document.getElementById('ai-input');
+        const term = document.getElementById('terminal');
+        aiIn.addEventListener('keypress', (e) => {
+            if(e.key === 'Enter') {
+                term.innerHTML += `<br><span style="color:#fff;">>> ${aiIn.value}</span>`;
+                setTimeout(() => {
+                    term.innerHTML += `<br>[AI]: Logic kompilasi berhasil. Script lo udah gue optimasi biar gak kaku kyk ayam.`;
+                    term.scrollTop = term.scrollHeight;
+                }, 500);
+                aiIn.value = '';
+            }
+        });
+    </script>
+</body>
+</html>
 en'));
             document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
             document.getElementById(t).classList.remove('hidden');
