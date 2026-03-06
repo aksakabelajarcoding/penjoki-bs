@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>AKSAKA | ULTIMATE_SYSTEM</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Plus+Jakarta+Sans:wght@400;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --accent: #ff0055; --bg: #ffffff; --ai-color: #00f2ff; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
+        body { background: var(--bg); color: #1a1a1a; font-family: 'Plus Jakarta Sans', sans-serif; height: 100dvh; width: 100vw; overflow: hidden; }
+
+        /* --- BACKGROUND PARTICLES --- */
+        #canvas-particles { position: fixed; inset: 0; z-index: 1; pointer-events: none; opacity: 0.5; }
+
+        /* --- SLIDE 1: HD VIDEO BACKGROUND --- */
+        #hero-slide {
+            position: fixed; inset: 0; z-index: 9999;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            background: #fff; transition: 1.2s cubic-bezier(0.85, 0, 0.15, 1);
+        }
+        .video-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; filter: brightness(1.1); }
+        .hero-overlay { position: absolute; inset: 0; background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(1px); }
+        .glitch-text { font-family: 'Orbitron'; font-size: 3.5rem; font-weight: 900; color: #1a1a1a; text-shadow: 4px 4px var(--accent); cursor: pointer; animation: bounce 2s infinite; }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+
+        /* --- MAIN APP --- */
+        #app { display: none; height: 100dvh; position: relative; background: #fafafa; z-index: 5; }
+        .container { position: relative; z-index: 10; max-width: 500px; margin: 0 auto; padding: 25px; height: 100%; overflow-y: auto; }
+        .section-header { font-family: 'Orbitron'; font-size: 1.4rem; font-weight: 900; border-left: 5px solid var(--accent); padding-left: 12px; margin-bottom: 20px; }
+        .card-gacor { background: rgba(255, 255, 255, 0.9); border: 1px solid #eee; padding: 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); backdrop-filter: blur(10px); }
+        
+        /* JOKI & PARTNER */
+        .joki-item { display: flex; justify-content: space-between; padding: 15px; background: #fff; border-radius: 12px; margin-bottom: 8px; border: 1px solid #f0f0f0; font-size: 13px; }
+        .partner-img-wrap { width: 130px; height: 130px; margin: 0 auto; padding: 5px; background: var(--accent); border-radius: 50% 20% 50% 20%; animation: morph 6s infinite alternate; }
+        .partner-img-wrap img { width: 100%; height: 100%; border-radius: inherit; object-fit: cover; border: 3px solid #fff; }
+        @keyframes morph { 0% { border-radius: 50% 20% 50% 20%; } 100% { border-radius: 20% 50% 20% 50%; } }
+
+        /* AI TERMINAL */
+        #ai-chat { background: #000; color: var(--ai-color); font-family: 'JetBrains Mono'; height: 280px; overflow-y: auto; padding: 15px; font-size: 11px; border-radius: 15px 15px 0 0; border: 1px solid #222; }
+        #ai-input { width: 100%; background: #111; border: 1px solid #222; color: #fff; padding: 12px; border-radius: 0 0 15px 15px; outline: none; font-family: 'JetBrains Mono'; font-size: 11px; }
+
+        /* NAVIGATION */
+        nav { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); width: 85%; max-width: 380px; height: 70px; background: rgba(255,255,255,0.9); backdrop-filter: blur(10px); border-radius: 35px; display: flex; justify-content: space-around; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.1); z-index: 100; border: 1px solid #eee; }
+        .nav-link { font-family: 'Orbitron'; font-size: 9px; font-weight: 900; color: #ccc; cursor: pointer; transition: 0.3s; }
+        .nav-link.active { color: var(--accent); transform: scale(1.1); }
+    </style>
+</head>
+<body>
+
+    <canvas id="canvas-particles"></canvas>
+    <audio id="bgm" loop><source src="https://files.catbox.moe/6v0p6a.mp3" type="audio/mpeg"></audio>
+
+    <div id="hero-slide">
+        <video class="video-bg" autoplay muted loop playsinline><source src="https://files.catbox.moe/g1h8cv.mp4" type="video/mp4"></video>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 class="glitch-text" id="aksaka-trigger">AKSAKA</h1>
+            <p class="text-[9px] tracking-[8px] text-zinc-500 mb-6 mt-2">SYSTEM_OVERDRIVE_V13</p>
+            <button onclick="enterSystem()" style="padding:15px 45px; background:#000; color:#fff; border-radius:50px; font-family:'Orbitron'; font-weight:900; cursor:pointer; box-shadow: 0 10px 20px rgba(0,0,0,0.2);">INITIALIZE</button>
+        </div>
+    </div>
+
+    <div id="app">
+        <div class="container">
+            <div id="core" class="tab-panel">
+                <h2 class="section-header">CORE_DATA</h2>
+                <center><img src="https://files.catbox.moe/kzrkbp.jpg" class="w-28 h-28 rounded-3xl mb-8 shadow-2xl object-cover rotate-2"></center>
+                <div class="card-gacor"><div id="type-target" style="font-family:'JetBrains Mono'; font-size:12px; line-height:2;"></div></div>
+            </div>
+
+            <div id="joki" class="tab-panel hidden">
+                <h2 class="section-header">SERVICES</h2>
+                <div class="joki-item"><span>LEGENDARY</span><b class="text-red-500">110K</b></div>
+                <div class="joki-item"><span>MASTER</span><b class="text-red-500">100K</b></div>
+                <div class="joki-item"><span>ELITE</span><b class="text-red-500">90K</b></div>
+                <a href="https://wa.me/6288902072245" class="block w-full py-5 bg-black text-white text-center font-black rounded-2xl mt-8 shadow-lg">ORDER_VIA_WA</a>
+            </div>
+
+            <div id="partner" class="tab-panel hidden">
+                <h2 class="section-header" style="border-color:#ff00f2;">LINKED</h2>
+                <div class="partner-img-wrap"><img src="https://files.catbox.moe/j44mvd.jpg"></div>
+                <h3 id="ayu-trigger" class="text-center font-black text-2xl mt-8 cursor-pointer text-zinc-800">AYU_CORE</h3>
+                <p class="text-center text-[9px] text-zinc-400 mt-2">6288902072245 | Encrypted Connection</p>
+            </div>
+
+            <div id="ai-layer" class="tab-panel hidden">
+                <h2 class="section-header" style="color:var(--ai-color); border-color:var(--ai-color);">NEURAL_AI</h2>
+                <div id="ai-chat">>> System initialized. Welcome, Aksaka-Arch.<br>>> Neural Brain v2.0 Online.</div>
+                <input type="text" id="ai-input" placeholder="Enter command or code query...">
+            </div>
+        </div>
+
+        <nav id="main-nav">
+            <div class="nav-link active" id="n-core" onclick="switchTab('core')">CORE</div>
+            <div class="nav-link" id="n-joki" onclick="switchTab('joki')">WORK</div>
+            <div class="nav-link" id="n-partner" onclick="switchTab('partner')">LINK</div>
+        </nav>
+    </div>
+
+    <script>
+        document.addEventListener('contextmenu', e => { e.preventDefault(); boom(); });
+        document.onkeydown = e => { if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && e.keyCode == 73)) { boom(); return false; } };
+
+        // --- SECURITY BOOMERANG ---
+        let logs = JSON.parse(localStorage.getItem('ddos_logs')) || [];
+        function boom() {
+            logs.push({ t: new Date().toLocaleString(), dev: navigator.userAgent });
+            localStorage.setItem('ddos_logs', JSON.stringify(logs));
+            document.body.innerHTML = "<div style='background:white; color:red; height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; font-family:monospace;'><h1>⚠️ BOOMERANG EFFECT ACTIVE</h1><p>ATTACK DETECTED. DEVICE INFECTED.</p></div>";
+            setTimeout(() => { while(true) { console.log("FREEZE"); } }, 500);
+        }
+
+        // --- VAULT (CLICK AYU 5X) ---
+        let ayuCount = 0;
+        document.getElementById('ayu-trigger').addEventListener('click', () => {
+            ayuCount++;
+            if(ayuCount >= 5) {
+                let p = prompt("ENTER VAULT PIN:");
+                if(p === "2245") {
+                    let res = logs.map(l => `<div style='font-size:10px; border-bottom:1px solid #eee; padding:10px;'><b>${l.t}</b><br>${l.dev}</div>`).join('');
+                    document.body.innerHTML = `<div style='padding:30px; background:#fff;'><h2>🛡️ ATTACKER LOGS</h2><hr>${res || "No threats detected."}<br><button onclick='location.reload()' style='padding:10px; background:red; color:white; border:none; border-radius:5px;'>EXIT</button></div>`;
+                }
+                ayuCount = 0;
+            }
+        });
+
+        // --- LAYER 6 (CLICK AKSAKA 5X) ---
+        let aksakaCount = 0;
+        document.getElementById('aksaka-trigger').addEventListener('click', () => {
+            aksakaCount++;
+            if(aksakaCount >= 5) {
+                let pw = prompt("ENTER AI KEY:");
+                if(pw === "0207") { enterSystem(); setTimeout(() => switchTab('ai-layer'), 1100); }
+                aksakaCount = 0;
+            }
+        });
+
+        // --- CORE SYSTEM ---
+        const txt = [">> DECRYPTING...", ">> USER: AKSAKA_ARCH", ">> STATUS: TAKEN_BY_AYU", ">> MODEL: OPPO_15", ">> ROLE: PRO_PROGRAMMER", ">> GACOR: 100%"];
+        function enterSystem() {
+            document.getElementById('bgm').play().catch(()=>{});
+            document.getElementById('hero-slide').style.transform = "translateY(-100%) skewY(1deg)";
+            setTimeout(() => { document.getElementById('app').style.display = 'block'; type(); initParticles(); }, 1000);
+        }
+        function type() {
+            let l=0, c=0; const t = document.getElementById('type-target'); t.innerHTML="";
+            function go() {
+                if(l < txt.length) {
+                    if(c < txt[l].length) { t.innerHTML += txt[l].charAt(c); c++; setTimeout(go, 30); }
+                    else { t.innerHTML += "<br>"; l++; c=0; setTimeout(go, 200); }
+                }
+            } go();
+        }
+        function switchTab(t) {
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
+            document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
+            document.getElementById(t).classList.remove('hidden');
+            if(t !== 'ai-layer') { document.getElementById('n-'+t).classList.add('active'); document.getElementById('main-nav').style.display = 'flex'; }
+            else { document.getElementById('main-nav').style.display = 'none'; }
+            if(t === 'core') type();
+        }
+
+        // --- AI LOGIC (PROGRAMMER BRAIN) ---
+        document.getElementById('ai-input').addEventListener('keypress', function(e) {
+            if(e.key === 'Enter') {
+                let m = this.value.toLowerCase();
+                const chat = document.getElementById('ai-chat');
+                chat.innerHTML += `<br><span style="color:#fff;">[Aksaka]: ${m}</span>`;
+                setTimeout(() => {
+                    let r = ">> Command not recognized. Focus on the stack, Aksaka.";
+                    if(m.includes('bug') || m.includes('error')) r = ">> Send the snippet. I'll optimize the logic and eliminate the redundancy.";
+                    else if(m.includes('joki')) r = ">> Current price list is optimal for your skill level. Keep pushing Legendary.";
+                    else if(m.includes('ddos')) r = ">> Boomerang active. Attacker's RAM usage is peaking. They're neutralized.";
+                    chat.innerHTML += `<br>[Aksaka-AI]: ${r}`;
+                    chat.scrollTop = chat.scrollHeight;
+                }, 400);
+                this.value = '';
+            }
+        });
+
+        // --- PARTICLES ---
+        function initParticles() {
+            const cv = document.getElementById('canvas-particles'); const cx = cv.getContext('2d');
+            cv.width = window.innerWidth; cv.height = window.innerHeight;
+            let p = [];
+            for(let i=0; i<50; i++) p.push({x:Math.random()*cv.width, y:Math.random()*cv.height, s:Math.random()*2.5, vx:Math.random()-0.5, vy:Math.random()-0.5});
+            function draw() {
+                cx.clearRect(0,0,cv.width,cv.height); cx.fillStyle="rgba(255,0,85,0.2)";
+                p.forEach(i => { i.x+=i.vx; i.y+=i.vy; if(i.x<0||i.x>cv.width)i.vx*=-1; if(i.y<0||i.y>cv.height)i.vy*=-1; cx.beginPath(); cx.arc(i.x,i.y,i.s,0,Math.PI*2); cx.fill(); });
+                requestAnimationFrame(draw);
+            } draw();
+        }
+    </script>
+</body>
+</html>
