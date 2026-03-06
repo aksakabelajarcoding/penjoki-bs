@@ -3,116 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>AKSAKA | FIX_CLICK</title>
+    <title>AKSAKA | FIX_LOGIN</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&display=swap" rel="stylesheet">
     <style>
         :root { --accent: #ff0055; }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: #fff; overflow: hidden; height: 100dvh; width: 100vw; font-family: 'Plus Jakarta Sans', sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { background: #000; overflow: hidden; height: 100vh; width: 100vw; }
 
-        /* --- BACKGROUND VIDEO (DI LOCK DI BELAKANG) --- */
-        .video-wrapper {
+        /* VIDEO BACKGROUND */
+        .video-container {
             position: fixed; top: 0; left: 0;
             width: 100%; height: 100%;
-            z-index: -2; /* Paling belakang */
-            background: #000;
+            z-index: 1; /* Paling belakang */
+            pointer-events: none; /* Supaya video gak bisa disentuh */
         }
-        video#eye-bg { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.9); }
-        
-        /* Overlay transparan biar nggak nutupin klik */
-        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.1); z-index: -1; pointer-events: none; }
+        video#eye-bg { width: 100%; height: 100%; object-fit: cover; }
 
-        /* --- HERO SECTION --- */
-        #hero-slide {
-            position: fixed; inset: 0; z-index: 50; /* Di atas video */
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            transition: 1s cubic-bezier(0.85, 0, 0.15, 1);
+        /* OVERLAY BIAR GAK GANGGU KLIK */
+        .click-layer {
+            position: fixed; inset: 0;
+            z-index: 100; /* Lapisan utama konten */
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
         }
 
-        .glitch-text {
+        .aksaka-title {
             font-family: 'Orbitron'; font-size: 3.5rem; color: #fff;
-            text-shadow: 0 0 15px var(--accent); letter-spacing: 8px;
-            cursor: pointer; pointer-events: auto; /* Pastikan bisa diklik */
+            text-shadow: 0 0 20px var(--accent); letter-spacing: 5px;
+            margin-bottom: 40px; pointer-events: none; /* Biar judul gak ngalangin klik tombol */
         }
 
-        .btn-init {
-            margin-top: 30px; padding: 18px 50px;
-            background: #fff; color: #000;
-            font-family: 'Orbitron'; font-weight: 900;
+        /* TOMBOL INITIALIZE - SEKARANG ANTI GAGAL */
+        .btn-gacor {
+            position: relative;
+            z-index: 999; /* PALING DEPAN */
+            padding: 20px 60px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #000; font-family: 'Orbitron'; font-weight: 900;
             border-radius: 50px; cursor: pointer;
-            border: none; z-index: 100; /* Pastikan di depan */
-            pointer-events: auto; /* WAJIB BIAR BISA DITEKAN */
-            box-shadow: 0 10px 30px rgba(255,0,85,0.4);
-            transition: 0.3s;
+            border: 4px solid var(--accent);
+            box-shadow: 0 0 30px rgba(255, 0, 85, 0.6);
+            pointer-events: auto !important; /* PAKSA BISA DIKLIK */
+            transition: 0.2s;
+            text-transform: uppercase;
         }
-        .btn-init:active { transform: scale(0.9); }
+        .btn-gacor:active { transform: scale(0.9); background: var(--accent); color: #fff; }
 
-        /* --- MAIN CONTENT (YANG CERAH) --- */
-        #main-app {
-            display: none; position: relative; z-index: 10;
-            background: #fff; height: 100dvh; padding: 30px;
-            overflow-y: auto; text-align: center;
+        /* HALAMAN DALEM (CERAH) */
+        #main-site {
+            display: none; position: fixed; inset: 0;
+            z-index: 2000; background: #fff;
+            padding: 40px; text-align: center; overflow-y: auto;
         }
     </style>
 </head>
 <body>
 
-    <div class="video-wrapper">
+    <div class="video-container">
         <video id="eye-bg" autoplay muted loop playsinline>
             <source src="https://files.catbox.moe/g1h8cv.mp4" type="video/mp4">
         </video>
     </div>
-    <div class="overlay"></div>
 
-    <div id="hero-slide">
-        <h1 class="glitch-text" id="aksaka-trigger">AKSAKA</h1>
-        <button class="btn-init" id="btn-initialize">INITIALIZE</button>
+    <div class="click-layer" id="login-screen">
+        <h1 class="aksaka-title">AKSAKA</h1>
+        <button class="btn-gacor" id="enter-btn">INITIALIZE</button>
     </div>
 
-    <div id="main-app">
-        <h1 style="font-family:'Orbitron'; font-size: 2rem; color: var(--accent);">SYSTEM ONLINE</h1>
-        <p style="margin-top:20px;">Halo Wak! Ini konten cerah lo yang tadi.</p>
-        <button onclick="location.reload()" style="margin-top:50px; padding:10px 20px; border:1px solid #ccc; border-radius:10px;">Kembali Ke Mata</button>
+    <div id="main-site">
+        <h1 style="color:var(--accent); font-family:'Orbitron'; font-size: 2rem;">WELCOME BACK, BOSS</h1>
+        <p style="margin-top:20px; color:#333;">Website lo udah kebuka sekarang. Gacor!</p>
+        <button onclick="location.reload()" style="margin-top:100px; color:red;">KEMBALI KE MATA</button>
     </div>
 
     <audio id="bgm" loop><source src="https://files.catbox.moe/6v0p6a.mp3" type="audio/mpeg"></audio>
 
     <script>
-        const btn = document.getElementById('btn-initialize');
-        const hero = document.getElementById('hero-slide');
-        const app = document.getElementById('main-app');
+        const loginScreen = document.getElementById('login-screen');
+        const mainSite = document.getElementById('main-site');
+        const btn = document.getElementById('enter-btn');
         const bgm = document.getElementById('bgm');
 
-        // FUNGSI UTAMA: BUKA WEBSITE
-        btn.addEventListener('click', () => {
-            console.log("Tombol ditekan!"); // Cek di console log
-            bgm.play().catch(() => {});
+        // LOGIC KLIK YANG GAK BISA MELARIKAN DIRI
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Stop gangguan dari layer lain
+            console.log("LOGIN SUCCESS");
             
-            // Animasi transisi
-            hero.style.opacity = "0";
-            hero.style.transform = "translateY(-100%)";
+            // Putar musik
+            bgm.play().catch(() => console.log("Musik butuh izin user"));
+
+            // Efek transisi
+            loginScreen.style.transition = "0.5s";
+            loginScreen.style.opacity = "0";
+            loginScreen.style.transform = "scale(1.2)";
             
             setTimeout(() => {
-                hero.style.display = "none";
-                app.style.display = "block";
-                document.body.style.overflow = "auto";
-                document.body.style.background = "#fff";
-            }, 800);
+                loginScreen.style.display = "none";
+                mainSite.style.display = "block";
+            }, 500);
         });
 
-        // --- RAHASIA AKSAKA (KLIK NAMA 5X) ---
-        let count = 0;
-        document.getElementById('aksaka-trigger').addEventListener('click', () => {
-            count++;
-            if(count >= 5) {
-                let pw = prompt("AKSAKA_PW:");
-                if(pw === "0207") alert("Access Granted to Layer 6.");
-                count = 0;
-            }
-        });
-
-        // Paksa video jalan
+        // Paksa video muter
         window.onload = () => { document.getElementById('eye-bg').play(); };
     </script>
 </body>
