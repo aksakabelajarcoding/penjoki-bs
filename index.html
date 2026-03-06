@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>AKSAKA | SYSTEM OVERRIDE</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --neon: #ff0000; --cyan: #00f2ff; --dark: #000; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; cursor: crosshair; }
+        
+        body {
+            margin: 0; background: var(--dark); color: white;
+            font-family: 'JetBrains Mono', monospace;
+            height: 100dvh; width: 100vw; overflow: hidden;
+        }
+
+        /* --- BACKGROUND HD DYNAMIC --- */
+        .bg-vibe {
+            position: fixed; inset: 0; z-index: -1;
+            background: radial-gradient(circle at center, #1a0000 0%, #000 100%);
+        }
+        .grid-3d {
+            position: absolute; inset: 0;
+            background-image: linear-gradient(rgba(255,0,0,0.05) 1px, transparent 1px), 
+                              linear-gradient(90deg, rgba(255,0,0,0.05) 1px, transparent 1px);
+            background-size: 40px 40px; transform: perspective(500px) rotateX(60deg);
+            transform-origin: bottom; animation: move-grid 3s linear infinite;
+        }
+        @keyframes move-grid { from { background-position: 0 0; } to { background-position: 0 40px; } }
+
+        /* --- GLITCH TITLE --- */
+        .glitch {
+            font-family: 'Orbitron', sans-serif; font-size: 4.5rem; font-weight: 900;
+            position: relative; color: white; text-shadow: 2px 2px var(--neon);
+            animation: glitch-anim 3s infinite linear alternate-reverse;
+        }
+        @keyframes glitch-anim {
+            0% { transform: skew(0deg); }
+            20% { transform: skew(-5deg); text-shadow: -2px 0 var(--cyan); }
+            40% { transform: skew(5deg); text-shadow: 2px 0 var(--neon); }
+            100% { transform: skew(0deg); }
+        }
+
+        /* --- VIDEO FRAME HD (RESPONSIVE) --- */
+        .video-container {
+            width: 85vw; max-width: 320px; aspect-ratio: 1/1;
+            margin: 25px 0; position: relative;
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 0 40px rgba(255, 0, 0, 0.2);
+            overflow: hidden; border-radius: 20px;
+        }
+        .video-container video { width: 100%; height: 100%; object-fit: cover; filter: brightness(1.2) contrast(1.1); }
+        .scanline {
+            position: absolute; inset: 0; 
+            background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.3) 50%);
+            background-size: 100% 4px; z-index: 2; pointer-events: none;
+        }
+
+        /* --- BUTTONS --- */
+        .btn-override {
+            font-family: 'Orbitron'; padding: 15px 40px;
+            background: transparent; border: 2px solid var(--neon);
+            color: var(--neon); font-weight: 900; letter-spacing: 5px;
+            transition: 0.4s; clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%);
+        }
+        .btn-override:hover { background: var(--neon); color: black; box-shadow: 0 0 30px var(--neon); transform: scale(1.1); }
+
+        /* --- MAIN APP INTERFACE --- */
+        #hero-slide {
+            position: fixed; inset: 0; z-index: 9999;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            background: black; transition: 1s cubic-bezier(0.86, 0, 0.07, 1);
+        }
+
+        #app { opacity: 0; transition: 1s; padding-bottom: 100px; }
+        
+        .terminal-card {
+            background: rgba(10, 10, 10, 0.7); backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 0, 0, 0.1); border-left: 4px solid var(--neon);
+            padding: 20px; border-radius: 0 15px 15px 0;
+            box-shadow: 10px 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .type-writer { color: var(--cyan); font-size: 13px; line-height: 1.8; text-shadow: 0 0 5px var(--cyan); }
+
+        /* --- NAV FLOATING --- */
+        nav {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 400px; height: 65px;
+            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(20px); border-radius: 20px;
+            display: flex; justify-content: space-around; align-items: center; z-index: 100;
+        }
+        .nav-item { font-size: 10px; font-weight: 900; color: #444; letter-spacing: 2px; transition: 0.3s; }
+        .nav-item.active { color: var(--neon); transform: translateY(-5px); text-shadow: 0 0 10px var(--neon); }
+
+        /* --- PROFILE HD MORPH --- */
+        .p-wrap {
+            width: 120px; height: 120px; margin: 0 auto 20px;
+            border: 2px solid var(--neon); padding: 5px;
+            animation: morph 6s ease-in-out infinite;
+        }
+        .p-wrap img { width: 100%; height: 100%; object-fit: cover; animation: inherit; }
+        @keyframes morph {
+            0%, 100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+            50% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+        }
+
+        .price-box {
+            background: rgba(255, 0, 0, 0.03); padding: 15px; border-radius: 10px;
+            border: 1px solid rgba(255, 0, 0, 0.1); margin-bottom: 10px;
+            display: flex; justify-content: space-between; font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-vibe"><div class="grid-3d"></div></div>
+    <audio id="bgm" loop><source src="https://files.catbox.moe/6v0p6a.mp3" type="audio/mpeg"></audio>
+
+    <div id="hero-slide">
+        <h1 class="glitch">AKSAKA</h1>
+        
+        <div class="video-container">
+            <div class="scanline"></div>
+            <video autoplay muted loop playsinline>
+                <source src="https://files.catbox.moe/g1h8cv.mp4" type="video/mp4">
+            </video>
+        </div>
+
+        <button class="btn-override" onclick="startSystem()">ACCESS_CORE</button>
+    </div>
+
+    <div id="app" class="p-6">
+        <div id="home" class="tab-panel active">
+            <div class="p-wrap"><img src="https://files.catbox.moe/kzrkbp.jpg"></div>
+            <div class="terminal-card">
+                <div id="text-target" class="type-writer"></div>
+                <div class="w-3 h-5 bg-cyan-500 inline-block animate-pulse mt-1"></div>
+            </div>
+        </div>
+
+        <div id="joki" class="tab-panel">
+            <h2 class="font-black text-red-600 text-center mb-6 tracking-widest uppercase">Joki Service Database</h2>
+            <div class="price-box"><span>LEGENDARY RANK</span><span class="text-red-500 font-bold">110K</span></div>
+            <div class="price-box"><span>MASTER RANK</span><span class="text-red-500 font-bold">100K</span></div>
+            <div class="price-box"><span>ELITE RANK</span><span class="text-red-500 font-bold">90K</span></div>
+            <a href="https://wa.me/6288902072245" class="block w-full py-4 bg-white text-black font-black text-center mt-6 rounded-lg">INITIALIZE_ORDER</a>
+        </div>
+
+        <div id="partner" class="tab-panel text-center">
+            <div class="p-wrap" style="border-color:#ff00f2;"><img src="https://files.catbox.moe/j44mvd.jpg"></div>
+            <h2 class="text-pink-500 font-black text-xl tracking-widest">AYU_CORE</h2>
+            <p class="text-[10px] text-zinc-600 mt-4 italic">"Permanent Connection Authorized."</p>
+        </div>
+
+        <nav>
+            <div class="nav-item active" id="n-home" onclick="switchTab('home')">CORE</div>
+            <div class="nav-item" id="n-joki" onclick="switchTab('joki')">SERVICE</div>
+            <div class="nav-item" id="n-partner" onclick="switchTab('partner')">PARTNER</div>
+        </nav>
+    </div>
+
+    <script>
+        document.addEventListener('contextmenu', e => e.preventDefault());
+
+        const dataIdentitas = [
+            ">> DECRYPTING USER DATA...",
+            ">> NAME: AKSAKA_ARCH",
+            ">> AGE: 15_CYCLES",
+            ">> STATUS: TAKEN_BY_AYU",
+            ">> OCC: PRO_JOKI_BS",
+            ">> HOBBY: CODE_AND_VOID",
+            ">> SECURITY: FULL_PROTECTION",
+            ">> SYSTEM_STATUS: STABLE"
+        ];
+
+        function startSystem() {
+            document.getElementById('bgm').play().catch(()=>{});
+            const hero = document.getElementById('hero-slide');
+            hero.style.transform = 'translateY(-100%) scale(0.8) rotateX(10deg)';
+            
+            setTimeout(() => {
+                hero.style.display = 'none';
+                document.getElementById('app').style.opacity = '1';
+                runTyping();
+            }, 1000);
+        }
+
+        function runTyping() {
+            let l = 0, c = 0;
+            const target = document.getElementById('text-target');
+            target.innerHTML = "";
+            
+            function type() {
+                if (l < dataIdentitas.length) {
+                    if (c < dataIdentitas[l].length) {
+                        target.innerHTML += dataIdentitas[l].charAt(c);
+                        c++;
+                        setTimeout(type, 35);
+                    } else {
+                        target.innerHTML += "<br>";
+                        l++; c = 0;
+                        setTimeout(type, 250);
+                    }
+                }
+            }
+            type();
+        }
+
+        function switchTab(t) {
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById(t).classList.add('active');
+            document.getElementById('n-' + t).classList.add('active');
+            if(t === 'home') runTyping();
+        }
+    </script>
+</body>
+</html>
