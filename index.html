@@ -3,96 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>AKSAKA | DARK_HD</title>
+    <title>AKSAKA | PRESTIGE_HD</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=JetBrains+Mono&family=Plus+Jakarta+Sans:wght@400;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=JetBrains+Mono:wght@500&family=Plus+Jakarta+Sans:wght@300;800&display=swap" rel="stylesheet">
     <style>
-        :root { --accent: #ff0055; --bg: #0a0a0a; --card: #141414; --ai-color: #00f2ff; }
+        :root { --accent: #ff0055; --ai: #00f2ff; --glass: rgba(255, 255, 255, 0.03); }
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; height: 100dvh; width: 100vw; overflow: hidden; }
+        body { background: #000; color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; height: 100dvh; overflow: hidden; }
 
-        /* --- BACKGROUND VIDEO (LOCKED) --- */
-        .video-fixed { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
-        video#eye-bg { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.6) contrast(1.2); }
+        /* --- BACKGROUND ULTRA HD --- */
+        .video-bg { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
+        video#eye-bg { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.4) contrast(1.2); scale: 1.1; }
 
         /* --- LOGIN SCREEN --- */
-        #login-screen {
-            position: fixed; inset: 0; z-index: 999;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            background: rgba(0,0,0,0.4); backdrop-filter: blur(5px);
-        }
-        .aksaka-title {
-            font-family: 'Orbitron'; font-size: 3.5rem; color: #fff;
-            text-shadow: 0 0 30px var(--accent); letter-spacing: 10px;
-            margin-bottom: 50px; cursor: pointer;
-        }
-        .btn-gacor {
-            padding: 22px 70px; background: var(--accent); color: #fff;
-            font-family: 'Orbitron'; font-weight: 900; border-radius: 15px;
-            cursor: pointer; border: none; box-shadow: 0 0 50px rgba(255, 0, 85, 0.4);
-            pointer-events: auto !important; transition: 0.3s;
-        }
-        .btn-gacor:active { transform: scale(0.95); filter: brightness(1.2); }
+        #login-screen { position: fixed; inset: 0; z-index: 999; display: flex; flex-direction: column; justify-content: center; align-items: center; background: radial-gradient(circle, rgba(0,0,0,0) 0%, #000 100%); transition: 1s ease-in-out; }
+        .aksaka-title { font-family: 'Orbitron'; font-size: clamp(3rem, 10vw, 5rem); color: #fff; text-shadow: 0 0 40px var(--accent); letter-spacing: 15px; margin-bottom: 50px; cursor: pointer; transition: 0.5s; }
+        .aksaka-title:hover { transform: scale(1.05); filter: hue-rotate(45deg); }
+        .btn-gacor { padding: 25px 80px; background: #fff; color: #000; font-family: 'Orbitron'; font-weight: 900; border-radius: 20px; cursor: pointer; border: none; box-shadow: 0 0 60px rgba(255, 255, 255, 0.2); transition: 0.4s; }
+        .btn-gacor:active { transform: scale(0.9); box-shadow: 0 0 20px var(--accent); }
 
-        /* --- MAIN APP (DARK HD MODE) --- */
-        #main-app {
-            display: none; position: fixed; inset: 0; z-index: 1000;
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
-            overflow-y: auto; padding-bottom: 120px;
-        }
-        .container { max-width: 500px; margin: 0 auto; padding: 25px; }
-        
-        /* CARD STYLE */
-        .card-hd { 
-            background: var(--card); border: 1px solid rgba(255,255,255,0.05); 
-            padding: 25px; border-radius: 24px; 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        /* --- MAIN APP --- */
+        #main-app { display: none; position: fixed; inset: 0; z-index: 1000; background: #000; overflow-y: auto; padding-bottom: 120px; }
+        .container { max-width: 450px; margin: 0 auto; padding: 30px 20px; }
+
+        /* --- JOKI CARD GACOR --- */
+        .joki-card {
+            background: linear-gradient(145deg, #111, #050505);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 30px; padding: 25px;
             position: relative; overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
-        .card-hd::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px;
-            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+        .joki-item {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 20px; border-radius: 20px; background: var(--glass);
+            margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.02);
+            transition: 0.3s; cursor: pointer;
         }
-        
-        /* LIST ITEM */
-        .item-dark { 
-            display: flex; justify-content: space-between; padding: 18px; 
-            background: rgba(255,255,255,0.03); border-radius: 16px; 
-            margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.05);
-            font-family: 'JetBrains Mono'; font-size: 13px;
-        }
+        .joki-item:hover { background: rgba(255,0,85,0.1); transform: translateX(10px); border-color: var(--accent); }
+        .rank-tag { font-family: 'Orbitron'; font-size: 10px; color: var(--accent); letter-spacing: 2px; }
+        .price-tag { font-family: 'JetBrains Mono'; font-weight: 800; color: #fff; font-size: 16px; }
 
-        /* PARTNER HD */
-        .partner-wrap { 
-            width: 150px; height: 150px; margin: 0 auto; border-radius: 30px; 
-            background: var(--accent); padding: 4px; box-shadow: 0 0 30px rgba(255,0,85,0.3);
-            animation: glow 3s infinite alternate;
-        }
-        .partner-wrap img { width: 100%; height: 100%; border-radius: 26px; object-fit: cover; }
-        @keyframes glow { from { box-shadow: 0 0 10px rgba(255,0,85,0.2); } to { box-shadow: 0 0 40px rgba(255,0,85,0.5); } }
+        /* --- AI TERMINAL OVERDRIVE --- */
+        #ai-ui { display: none; position: fixed; inset: 0; z-index: 2000; background: #000; padding: 20px; flex-direction: column; }
+        .ai-eye-mini { width: 100%; height: 200px; border-radius: 25px; overflow: hidden; border: 1px solid var(--ai); box-shadow: 0 0 30px rgba(0,242,255,0.2); margin-bottom: 20px; }
+        .ai-eye-mini video { width: 100%; height: 100%; object-fit: cover; }
+        #terminal { flex: 1; overflow-y: auto; font-family: 'JetBrains Mono'; color: var(--ai); font-size: 12px; padding: 10px; text-shadow: 0 0 5px var(--ai); }
+        .ai-input-box { background: #111; border-radius: 15px; padding: 15px; display: flex; align-items: center; border: 1px solid #222; }
 
-        /* NAVIGATION DARK */
-        nav { 
-            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); 
-            width: 90%; max-width: 400px; height: 75px; 
-            background: rgba(20,20,20,0.8); backdrop-filter: blur(20px); 
-            border-radius: 25px; display: flex; justify-content: space-around; 
-            align-items: center; border: 1px solid rgba(255,255,255,0.1); z-index: 1100;
-        }
-        .nav-link { font-family: 'Orbitron'; font-size: 10px; font-weight: 900; color: #555; cursor: pointer; transition: 0.3s; }
-        .nav-link.active { color: var(--accent); text-shadow: 0 0 10px var(--accent); }
-
-        /* AI TERMINAL LAYER 6 */
-        #ai-ui { 
-            background: #000; border: 1px solid var(--ai-color); 
-            border-radius: 20px; padding: 20px; margin-top: 20px;
-            box-shadow: 0 0 30px rgba(0, 242, 255, 0.15);
-        }
+        /* --- NAV HD --- */
+        nav { position: fixed; bottom: 35px; left: 50%; transform: translateX(-50%); width: 90%; height: 80px; background: rgba(10,10,10,0.7); backdrop-filter: blur(25px); border-radius: 30px; display: flex; justify-content: space-around; align-items: center; border: 1px solid rgba(255,255,255,0.05); z-index: 1500; }
+        .nav-link { font-family: 'Orbitron'; font-size: 10px; font-weight: 900; color: #444; transition: 0.3s; }
+        .nav-link.active { color: #fff; text-shadow: 0 0 15px #fff; }
     </style>
 </head>
 <body>
 
-    <div class="video-fixed">
+    <div class="video-bg">
         <video id="eye-bg" autoplay muted loop playsinline><source src="https://files.catbox.moe/g1h8cv.mp4" type="video/mp4"></video>
     </div>
 
@@ -105,91 +72,102 @@
         <div class="container">
             <div id="core" class="tab-panel">
                 <center>
-                    <div class="relative inline-block mb-10">
-                        <img src="https://files.catbox.moe/kzrkbp.jpg" class="w-32 h-32 rounded-[40px] shadow-2xl object-cover border-2 border-white/10">
-                        <div class="absolute -bottom-2 -right-2 bg-pink-600 px-3 py-1 rounded-lg text-[10px] font-black">PRO</div>
+                    <div class="relative inline-block mb-10 group">
+                        <div class="absolute inset-0 bg-pink-600 blur-2xl opacity-20 group-hover:opacity-50 transition"></div>
+                        <img src="https://files.catbox.moe/kzrkbp.jpg" class="w-36 h-36 rounded-[45px] relative z-10 border border-white/10 object-cover shadow-2xl">
                     </div>
                 </center>
-                <div class="card-hd">
-                    <div id="type-target" style="font-family:'JetBrains Mono'; font-size:12px; line-height:2.2; color:#00ffaa;"></div>
+                <div class="joki-card">
+                    <div id="type-target" style="font-family:'JetBrains Mono'; font-size:13px; color:#00ffaa; line-height:2;"></div>
                 </div>
             </div>
 
-            <div id="joki" class="tab-panel hidden text-center">
-                <h2 class="font-black text-xl mb-8 tracking-widest text-zinc-400">SERVICE_DATABASE</h2>
-                <div class="item-dark"><span>LEGENDARY_RANK</span><b class="text-pink-500">110K</b></div>
-                <div class="item-dark"><span>MASTER_RANK</span><b class="text-pink-500">100K</b></div>
-                <div class="item-dark"><span>ELITE_RANK</span><b class="text-pink-500">90K</b></div>
-                <a href="https://wa.me/6288902072245" class="block w-full py-5 bg-white text-black font-black rounded-2xl mt-10 hover:bg-pink-500 transition-all">INITIALIZE_ORDER</a>
+            <div id="joki" class="tab-panel hidden">
+                <h2 class="text-center font-black text-zinc-600 tracking-[10px] mb-8 text-xs">ELITE_SERVICES</h2>
+                <div class="joki-card">
+                    <div class="joki-item">
+                        <div><p class="rank-tag">MYTHIC_GLORY</p><p class="text-[10px] text-zinc-500">Processing Speed: High</p></div>
+                        <span class="price-tag">110K</span>
+                    </div>
+                    <div class="joki-item">
+                        <div><p class="rank-tag">MYTHIC_IMMORTAL</p><p class="text-[10px] text-zinc-500">Pro-Player Logic</p></div>
+                        <span class="price-tag">150K</span>
+                    </div>
+                    <div class="joki-item">
+                        <div><p class="rank-tag">CUSTOM_REQUEST</p><p class="text-[10px] text-zinc-500">Contact for Negotiate</p></div>
+                        <span class="price-tag">$$$</span>
+                    </div>
+                    <a href="https://wa.me/6288902072245" class="block w-full py-5 bg-white text-black text-center font-black rounded-2xl mt-5 hover:scale-[1.02] transition active:scale-95">BOOK_SESSION</a>
+                </div>
             </div>
 
             <div id="partner" class="tab-panel hidden text-center">
-                <div class="partner-wrap"><img src="https://files.catbox.moe/j44mvd.jpg"></div>
-                <h3 id="ayu-trigger" class="font-black text-3xl mt-10 tracking-tighter text-white">AYU_CORE</h3>
-                <p class="text-[10px] text-zinc-500 mt-4 tracking-[4px]">PROTECTED_BY_VAULT</p>
-            </div>
-
-            <div id="ai-ui" class="hidden">
-                <div id="terminal" class="h-64 overflow-y-auto text-[11px] mb-4 text-cyan-400">>> NEURAL_LINK_ESTABLISHED...<br>>> WELCOME BACK, AKSAKA.</div>
-                <input type="text" id="ai-input" class="w-full bg-zinc-900/50 border border-cyan-900/50 text-white p-4 rounded-xl outline-none" placeholder="Type logic command...">
+                <div class="relative inline-block mt-10">
+                    <img src="https://files.catbox.moe/j44mvd.jpg" class="w-44 h-44 rounded-[50px] border-2 border-white/5 object-cover">
+                    <div class="absolute inset-0 shadow-[inset_0_0_40px_rgba(0,0,0,0.8)] rounded-[50px]"></div>
+                </div>
+                <h3 id="ayu-trigger" class="text-3xl font-black mt-10 tracking-tighter hover:text-pink-500 transition cursor-pointer">AYU_CORE</h3>
+                <p class="text-[9px] text-zinc-700 tracking-[5px] mt-4">ENCRYPTED_PARTNER_V3</p>
             </div>
         </div>
 
-        <nav id="navbar">
-            <div class="nav-link active" onclick="switchTab('core')">CORE</div>
-            <div class="nav-link" onclick="switchTab('joki')">WORK</div>
-            <div class="nav-link" onclick="switchTab('partner')">LINK</div>
+        <nav>
+            <div class="nav-link active" onclick="switchTab('core', this)">CORE</div>
+            <div class="nav-link" onclick="switchTab('joki', this)">JOKI</div>
+            <div class="nav-link" onclick="switchTab('partner', this)">LINK</div>
         </nav>
+    </div>
+
+    <div id="ai-ui">
+        <div class="ai-eye-mini">
+            <video autoplay muted loop playsinline><source src="https://files.catbox.moe/g1h8cv.mp4" type="video/mp4"></video>
+        </div>
+        <div id="terminal">>> NEURAL_LINK: ACTIVE<br>>> [AI]: Ready to dominate the codebase, Boss.</div>
+        <div class="ai-input-box">
+            <input type="text" id="ai-input" placeholder="Tanya kodingan level dewa..." class="bg-transparent border-none outline-none text-white w-full font-mono">
+        </div>
+        <button onclick="location.reload()" class="mt-6 text-[10px] text-zinc-800 tracking-widest">DISCONNECT_SYSTEM</button>
     </div>
 
     <audio id="bgm" loop><source src="https://files.catbox.moe/6v0p6a.mp3" type="audio/mpeg"></audio>
 
     <script>
-        const btn = document.getElementById('enter-btn');
-        const login = document.getElementById('login-screen');
-        const app = document.getElementById('main-app');
-        const bgm = document.getElementById('bgm');
+        // --- NAVIGATION LOGIC ---
+        function switchTab(tab, el) {
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
+            document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
+            document.getElementById(tab).classList.remove('hidden');
+            el.classList.add('active');
+            if(tab === 'core') type();
+        }
 
-        btn.addEventListener('click', () => {
-            bgm.play().catch(()=>{});
-            login.style.opacity = '0';
+        // --- ENTER APP ---
+        document.getElementById('enter-btn').addEventListener('click', () => {
+            document.getElementById('bgm').play().catch(()=>{});
+            document.getElementById('login-screen').style.opacity = '0';
             setTimeout(() => {
-                login.style.display = 'none';
-                app.style.display = 'block';
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('main-app').style.display = 'block';
                 type();
-            }, 500);
+            }, 800);
         });
 
-        // --- LAYER 6: AKSAKA (PW 0207) ---
+        // --- LAYER 6: AKSAKA (0207) ---
         let aksakaCount = 0;
         document.getElementById('aksaka-trigger').addEventListener('click', () => {
             aksakaCount++;
             if(aksakaCount >= 5) {
-                let pw = prompt("AKSAKA_ACCESS_KEY:");
+                let pw = prompt("AKSAKA_KEY:");
                 if(pw === "0207") {
-                    login.style.display = 'none';
-                    app.style.display = 'block';
-                    document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
-                    document.getElementById('ai-ui').classList.remove('hidden');
-                    document.getElementById('navbar').style.display = 'none';
+                    document.getElementById('login-screen').style.display = 'none';
+                    document.getElementById('ai-ui').style.display = 'flex';
                 }
                 aksakaCount = 0;
             }
         });
 
-        // --- VAULT: AYU (PIN 2245) ---
-        let ayuCount = 0;
-        document.getElementById('ayu-trigger').addEventListener('click', () => {
-            ayuCount++;
-            if(ayuCount >= 5) {
-                let p = prompt("VAULT_PIN:");
-                if(p === "2245") alert("Security Log: Boomerang System Active.");
-                ayuCount = 0;
-            }
-        });
-
         // --- TYPEWRITER ---
-        const txt = [">> DECRYPTING_DATA...", ">> NAME: AKSAKA_ARCH", ">> STATUS: TAKEN_BY_AYU", ">> ROLE: SENIOR_DEV", ">> STATUS: GACOR_LEVEL_MAX"];
+        const txt = [">> INITIALIZING_HD_BOOT...", ">> USER: AKSAKA_ARCH", ">> STATUS: TAKEN_BY_AYU", ">> SKILL: GOD_LEVEL_IT"];
         function type() {
             let l=0, c=0; const t = document.getElementById('type-target'); t.innerHTML="";
             function go() {
@@ -200,8 +178,23 @@
             } go();
         }
 
-        function switchTab(t) {
-            document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
+        // --- AI CHAT LOGIC ---
+        const aiIn = document.getElementById('ai-input');
+        const term = document.getElementById('terminal');
+        aiIn.addEventListener('keypress', (e) => {
+            if(e.key === 'Enter') {
+                term.innerHTML += `<br><span style="color:#fff;">>> ${aiIn.value}</span>`;
+                setTimeout(() => {
+                    term.innerHTML += `<br>[AI]: Logic kompilasi berhasil. Script lo udah gue optimasi biar gak kaku kyk ayam.`;
+                    term.scrollTop = term.scrollHeight;
+                }, 500);
+                aiIn.value = '';
+            }
+        });
+    </script>
+</body>
+</html>
+en'));
             document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
             document.getElementById(t).classList.remove('hidden');
             if(t === 'core') type();
